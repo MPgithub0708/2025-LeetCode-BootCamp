@@ -50,3 +50,26 @@ class Solution:
             pointer2 *= nums[i]  # Update pointer2 product
 
         return result
+
+#Q3: Sort Colours:
+
+Code:
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        left, right, i = 0, len(nums) - 1, 0
+        
+        while i <= right:
+            if nums[i] == 0:
+                nums[i], nums[left] = nums[left], nums[i]  # Swap with left pointer
+                left += 1
+                i += 1  # Move forward since swapped value is guaranteed to be correct
+            elif nums[i] == 2:
+                nums[i], nums[right] = nums[right], nums[i]  # Swap with right pointer
+                right -= 1  # Decrement right pointer
+                # Do NOT increment `i` because the swapped element needs to be checked again
+            else:
+                i += 1  # Move forward for 1s since they are in correct position
+
