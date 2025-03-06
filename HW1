@@ -30,7 +30,7 @@ class Solution:
             result[i] = pointer1
             pointer1 *= nums[i]  # Update pointer1 product
 
-        # Second pass: Compute suffix product using pointer2 and multiply with      result
+        # Second pass: Compute suffix product using pointer2 and multiply with the result
         pointer2 = 1
         for i in range(n - 1, -1, -1):
             result[i] *= pointer2
@@ -53,10 +53,10 @@ class Solution:
             if nums[i] == 0:
                 nums[i], nums[left] = nums[left], nums[i]  # Swap with left pointer
                 left += 1
-                i += 1  # Move forward since swapped value is guaranteed to be correct
+                i += 1  # Move forward since swapped value is definitely correct
             elif nums[i] == 2:
                 nums[i], nums[right] = nums[right], nums[i]  # Swap with right pointer
                 right -= 1  # Decrement right pointer
             else:
-                i += 1  # Move forward for 1s since they are in correct position
+                i += 1  # Move forward 
 
