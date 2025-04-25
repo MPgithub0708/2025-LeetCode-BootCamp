@@ -1,0 +1,90 @@
+Q1: 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+         if not root:
+            return []
+
+         result = []
+         queue = deque([root])
+
+         while queue:
+            level_length = len(queue)
+            for i in range(level_length):
+                node = queue.popleft()
+                # Capture the rightmost element at this level
+                if i == level_length - 1:
+                    result.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+
+         return result
+
+Q2:
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        queue = deque()
+        fresh_oranges = 0
+        
+        # Step 1: Add all initially rotten oranges to the queue
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 2:
+                    queue.append((r, c, 0))  # (row, col, time)
+                elif grid[r][c] == 1:
+                    fresh_oranges += 1
+        
+        # Directions: up, down, left, right
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        minutes_elapsed = 0
+        
+        # Step 2: Process BFS
+        while queue:
+            r, c, minutes_elapsed = queue.popleft()
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                    grid[nr][nc] = 2  # Mark as rotten
+                    fresh_oranges -= 1
+                    queue.append((nr, nc, minutes_elapsed + 1))
+        
+        # Step 3: Check if all fresh oranges are rotted
+        return minutes_elapsed if fresh_oranges == 0 else -1       
+
+
+Q3:
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        in_degree = [0] * numCourses
+        
+        for dest, src in prerequisites:
+            graph[src].append(dest)
+            in_degree[dest] += 1
+        
+        # Step 2: Initialize the queue with courses having 0 in-degree (no prerequisites)
+        queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        course_order = []
+        
+        # Step 3: Process the queue
+        while queue:
+            course = queue.popleft()
+            course_order.append(course)
+            for neighbor in graph[course]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # Step 4: Check if we were able to take all courses
+        if len(course_order) == numCourses:
+            return course_order
+        else:
+            return []
